@@ -1,0 +1,22 @@
+version: 2
+jobs:
+  tests:
+    working_directory: /go/src/github.com/fchoquet/golibs
+    docker:
+      - image: circleci/golang:1.10.1
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run: docker version && docker-compose version
+      - run: curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+      - run: dep ensure
+      - run: go get -u github.com/golang/lint/golint
+      - run: golint -set_exit_status $(go list ./...)
+      - run: go vet ./...
+      - run: go test -v -race ./...
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - tests
