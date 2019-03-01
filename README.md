@@ -25,3 +25,11 @@ It provides a logrus-like interface to work with tags.
 ## Queue
 
 The queue package provides the basic tools to build a worker. It sends messages via a go channel and hides all the polling logic.
+
+## Retry
+
+The retry package provides a generic retrier and an http client with retry capabilities
+
+## Pager
+
+The pager package provides basic pagination capabilities
