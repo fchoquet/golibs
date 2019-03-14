@@ -17,28 +17,42 @@ func TestGetPagerProperties(t *testing.T) {
 		enabled bool
 	}{
 		{
-			page:    1,
+			page:    0,
 			limit:   1,
 			first:   0,
 			last:    0,
 			enabled: true,
 		},
 		{
+			page:    1,
+			limit:   1,
+			first:   1,
+			last:    1,
+			enabled: true,
+		},
+		{
 			page:    3,
 			limit:   20,
-			first:   40,
-			last:    59,
+			first:   60,
+			last:    79,
 			enabled: true,
 		},
 		{
 			page:    5,
 			limit:   3,
-			first:   12,
-			last:    14,
+			first:   15,
+			last:    17,
 			enabled: true,
 		},
 		{
 			page:    0,
+			limit:   0,
+			first:   0,
+			last:    0,
+			enabled: false,
+		},
+		{
+			page:    2,
 			limit:   0,
 			first:   0,
 			last:    0,
@@ -49,8 +63,8 @@ func TestGetPagerProperties(t *testing.T) {
 	for _, f := range fixtures {
 		p := New(f.page, f.limit)
 
-		assert.Equal(f.page, p.Page())
-		assert.Equal(f.limit, p.Limit())
+		assert.Equal(f.page, p.Page)
+		assert.Equal(f.limit, p.Limit)
 		assert.Equal(f.first, p.First())
 		assert.Equal(f.last, p.Last())
 		assert.Equal(f.enabled, p.Enabled())
@@ -67,7 +81,7 @@ func TestPagerIsVisible(t *testing.T) {
 		visible bool
 	}{
 		{
-			page:    1,
+			page:    0,
 			limit:   1,
 			index:   0,
 			visible: true,
@@ -75,38 +89,44 @@ func TestPagerIsVisible(t *testing.T) {
 		{
 			page:    1,
 			limit:   1,
+			index:   0,
+			visible: false,
+		},
+		{
+			page:    1,
+			limit:   1,
 			index:   1,
-			visible: false,
-		},
-		{
-			page:    2,
-			limit:   10,
-			index:   9,
-			visible: false,
-		},
-		{
-			page:    2,
-			limit:   10,
-			index:   10,
-			visible: true,
-		},
-		{
-			page:    2,
-			limit:   10,
-			index:   11,
 			visible: true,
 		},
 		{
 			page:    2,
 			limit:   10,
 			index:   19,
-			visible: true,
+			visible: false,
 		},
 		{
 			page:    2,
 			limit:   10,
 			index:   20,
+			visible: true,
+		},
+		{
+			page:    2,
+			limit:   10,
+			index:   21,
+			visible: true,
+		},
+		{
+			page:    3,
+			limit:   10,
+			index:   29,
 			visible: false,
+		},
+		{
+			page:    3,
+			limit:   10,
+			index:   30,
+			visible: true,
 		},
 		// limit: 0 disables the pager
 		{
@@ -135,48 +155,48 @@ func TestPagerPageOf(t *testing.T) {
 		{
 			limit:  1,
 			index:  0,
-			pageOf: 1,
+			pageOf: 0,
 		},
 		{
 			limit:  1,
 			index:  1,
-			pageOf: 2,
-		},
-		{
-			limit:  10,
-			index:  9,
 			pageOf: 1,
 		},
 		{
 			limit:  10,
+			index:  9,
+			pageOf: 0,
+		},
+		{
+			limit:  10,
 			index:  10,
-			pageOf: 2,
+			pageOf: 1,
 		},
 		{
 			limit:  10,
 			index:  11,
-			pageOf: 2,
+			pageOf: 1,
 		},
 		{
 			limit:  10,
 			index:  19,
-			pageOf: 2,
+			pageOf: 1,
 		},
 		{
 			limit:  10,
 			index:  20,
-			pageOf: 3,
+			pageOf: 2,
 		},
 		// limit: 0 disables the pager
 		{
 			limit:  0,
 			index:  9999,
-			pageOf: 1,
+			pageOf: 0,
 		},
 	}
 
 	for _, f := range fixtures {
-		p := New(2, f.limit)
+		p := New(1, f.limit)
 
 		assert.Equal(f.pageOf, p.PageOf(f.index))
 	}
